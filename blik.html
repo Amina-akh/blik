@@ -1,0 +1,748 @@
+<title>БЛИК</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Onest:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#0C0B0E; --surface:#141317; --surface-2:#1B191F; --surface-3:#232028;
+  --line:#282430; --line-soft:#1F1C25;
+  --ink:#F4F1EC; --muted:#948C99; --faint:#645D6C;
+  --gold:#E3CFA4; --gold-deep:#B99A62; --gold-ink:#1A150C;
+  --ok:#8FBF9E; --warn:#D6A96B; --stop:#D98A8A;
+  --glow:radial-gradient(120% 100% at 50% 0%, rgba(227,207,164,.09), transparent 62%);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ground:#E9E7E6; --surface:#FDFCFB; --surface-2:#F3F1EF; --surface-3:#EAE7E3;
+    --line:#D6D2CE; --line-soft:#E3E0DC;
+    --ink:#151317; --muted:#6B6470; --faint:#948C99;
+    --gold:#8A6A2E; --gold-deep:#6E5320; --gold-ink:#FFFFFF;
+    --ok:#3B7A54; --warn:#8A5D1C; --stop:#A44A4A;
+    --glow:radial-gradient(120% 100% at 50% 0%, rgba(138,106,46,.045), transparent 60%);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#E9E7E6; --surface:#FDFCFB; --surface-2:#F3F1EF; --surface-3:#EAE7E3;
+  --line:#D6D2CE; --line-soft:#E3E0DC;
+  --ink:#151317; --muted:#6B6470; --faint:#948C99;
+  --gold:#8A6A2E; --gold-deep:#6E5320; --gold-ink:#FFFFFF;
+  --ok:#3B7A54; --warn:#8A5D1C; --stop:#A44A4A;
+  --glow:radial-gradient(120% 100% at 50% 0%, rgba(138,106,46,.045), transparent 60%);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--ground); background-image:var(--glow); background-repeat:no-repeat;
+  color:var(--ink);
+  font-family:"Onest","Helvetica Neue",Arial,sans-serif;
+  font-size:14px; line-height:1.55; letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased; padding-bottom:82px;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;letter-spacing:inherit}
+a{color:inherit}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+.num{font-variant-numeric:tabular-nums}
+.serif{font-family:"Prata",Georgia,serif;font-weight:400;letter-spacing:0}
+
+.app{max-width:520px;margin:0 auto;padding:0 20px}
+
+/* ---- wordmark ---- */
+.mast{padding:26px 0 18px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.wordmark{display:flex;flex-direction:column;gap:5px}
+.wordmark b{
+  font-family:"Prata",Georgia,serif;font-weight:400;font-size:23px;
+  letter-spacing:.42em;text-indent:.42em;line-height:1;
+}
+.wordmark span{font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--faint);text-indent:.1em}
+.idchip{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.idchip i{width:22px;height:22px;display:block;border-radius:2px}
+.rule{height:1px;background:var(--line)}
+
+.banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0 0;font-size:11.5px;color:var(--muted)}
+.banner b{color:var(--gold);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:10px}
+.banner button{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--gold);padding-bottom:1px}
+
+/* ---- shared ---- */
+.stack{display:flex;flex-direction:column;gap:26px;padding-top:22px}
+.lab{font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.vhead{display:flex;flex-direction:column;gap:9px}
+.vhead h2{margin:0;font-family:"Prata",Georgia,serif;font-weight:400;font-size:32px;line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
+.vhead p{margin:0;font-size:13px;color:var(--muted);max-width:42ch}
+
+.block{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:15px}
+.phead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line-soft)}
+.phead .t{font-size:13.5px;font-weight:600}
+.phead .s{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+
+/* ---- hero numeral ---- */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.hero .swatch{width:74px;height:104px;border-radius:3px;position:relative;overflow:hidden}
+.hero .swatch::after{content:"";position:absolute;inset:0;background:linear-gradient(112deg,rgba(255,255,255,.34),transparent 46%)}
+.hero .meta{display:flex;flex-direction:column;gap:3px;min-width:0}
+.hero .meta .n{font-family:"Prata",Georgia,serif;font-size:62px;line-height:.86;font-variant-numeric:tabular-nums}
+.hero .meta .t{font-size:14px;color:var(--ink)}
+.hero .meta .u{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+
+/* ---- level scale ---- */
+.scale{display:flex;gap:2px}
+.scale .lv{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:0;min-width:0;background:none;border:0}
+.scale .lv i{width:100%;height:44px;border-radius:2px;display:block;transition:height .16s ease}
+.scale .lv span{font-size:9.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.scale .lv.on i{height:58px;box-shadow:0 0 0 1px var(--ground),0 0 0 2px var(--ink)}
+.scale .lv.on span{color:var(--ink);font-weight:700}
+.scale .lv.goal i{height:58px;box-shadow:0 0 0 1px var(--ground),0 0 0 2px var(--gold)}
+.scale .lv.goal span{color:var(--gold);font-weight:700}
+.scale.pick .lv{cursor:pointer}
+.scalewrap{display:flex;flex-direction:column;gap:9px}
+.scalefoot{display:flex;justify-content:space-between;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+
+/* ---- key/value ---- */
+.kv{display:flex;flex-direction:column}
+.kv .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.kv .row:last-child{border-bottom:0;padding-bottom:0}
+.kv .row .k{font-size:12.5px;color:var(--muted)}
+.kv .row .v{font-size:13.5px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.kv .row .v.gold{color:var(--gold)}
+
+/* ---- palette ---- */
+.pal{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px;margin:0 -18px;padding-left:18px;padding-right:18px;scrollbar-width:none}
+.pal::-webkit-scrollbar{display:none}
+.pal .p{flex:none;width:66px;display:flex;flex-direction:column;gap:8px;text-align:center}
+.pal .p i{width:66px;height:66px;border-radius:50%;display:block;position:relative;overflow:hidden}
+.pal .p i::after{content:"";position:absolute;inset:0;background:linear-gradient(128deg,rgba(255,255,255,.32),transparent 48%)}
+.pal .p span{font-size:10px;line-height:1.3;color:var(--muted)}
+.pal .p b{display:block;font-size:11px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---- notes & verdicts ---- */
+.note{font-size:12px;line-height:1.5;color:var(--muted);padding-left:14px;border-left:1px solid var(--gold)}
+.note.stop{border-color:var(--stop)}
+.note.ok{border-color:var(--ok)}
+.verdict{display:flex;flex-direction:column;gap:4px;padding:15px 0 0}
+.verdict .vv{font-family:"Prata",Georgia,serif;font-size:22px;line-height:1.2;text-wrap:balance}
+.verdict.go .vv{color:var(--ok)}
+.verdict.care .vv{color:var(--warn)}
+.verdict.stop .vv{color:var(--stop)}
+.verdict .vs{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+
+/* ---- buttons ---- */
+.btn{display:block;width:100%;text-align:center;padding:15px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--gold-ink);text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btnrow{display:flex;flex-direction:column;gap:10px}
+
+/* ---- form ---- */
+.field{display:flex;flex-direction:column;gap:10px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:82px;padding:11px 8px;border-radius:5px;border:1px solid var(--line);font-size:11.5px;color:var(--muted);background:transparent}
+.seg button[aria-pressed="true"]{border-color:var(--gold);color:var(--ink);font-weight:600}
+select,input[type="date"]{
+  width:100%;padding:13px 12px;border-radius:5px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:13px;
+}
+
+/* ---- cycle ---- */
+.daybig{display:flex;align-items:flex-end;gap:14px}
+.daybig .n{font-family:"Prata",Georgia,serif;font-size:76px;line-height:.8;font-variant-numeric:tabular-nums}
+.daybig .c{display:flex;flex-direction:column;gap:2px;padding-bottom:5px}
+.daybig .c b{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.daybig .c span{font-size:12px;color:var(--muted)}
+.bar{height:2px;background:var(--line);position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+
+.tl{display:flex;flex-direction:column}
+.tl .t{display:grid;grid-template-columns:34px 1fr;gap:16px;padding-bottom:18px}
+.tl .t:last-child{padding-bottom:0}
+.tl .t .d{font-size:11px;color:var(--faint);text-align:right;font-variant-numeric:tabular-nums;padding-top:2px}
+.tl .t .c{border-left:1px solid var(--line);padding-left:18px;position:relative;padding-bottom:2px}
+.tl .t:last-child .c{border-left-color:transparent}
+.tl .t .c::before{content:"";position:absolute;left:-3px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--line)}
+.tl .t .c b{display:block;font-size:13px;font-weight:500;color:var(--muted);line-height:1.35}
+.tl .t .c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint);margin-top:2px}
+.tl .t.past .c b{color:var(--faint)}
+.tl .t.now .c b{color:var(--ink);font-weight:600}
+.tl .t.now .c::before{background:var(--ink);box-shadow:0 0 0 4px color-mix(in srgb,var(--ink) 14%,transparent)}
+.tl .t.now .d{color:var(--ink);font-weight:700}
+.tl .t.book .c b{color:var(--gold)}
+.tl .t.book .c::before{background:var(--gold)}
+
+/* ---- shelf ---- */
+.shelf{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.item:first-child{padding-top:0}
+.item:last-child{border-bottom:0;padding-bottom:0}
+.item .n{font-size:13.5px;font-weight:600;line-height:1.35}
+.item .n em{display:block;font-style:normal;font-size:11.5px;font-weight:400;color:var(--faint);margin-top:3px}
+.item .p{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--gold)}
+ul.avoid{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.avoid li{font-size:12.5px;color:var(--muted);line-height:1.45;padding-left:16px;position:relative}
+ul.avoid li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:1px;background:var(--stop)}
+
+/* ---- works ---- */
+.works{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.work{aspect-ratio:4/5;border-radius:4px;overflow:hidden;position:relative;background:var(--surface-2)}
+.work img{width:100%;height:100%;object-fit:cover;display:block}
+.work .cap{position:absolute;left:0;right:0;bottom:0;padding:9px 10px;font-size:10px;font-weight:600;letter-spacing:.06em;background:linear-gradient(transparent,rgba(8,7,10,.85));color:#F4F1EC}
+.slot{aspect-ratio:4/5;border-radius:4px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:14px;background:var(--surface-2)}
+.slot b{font-family:"Prata",Georgia,serif;font-size:26px;color:var(--line);line-height:1}
+.slot span{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);line-height:1.5}
+
+.summary{width:100%;min-height:150px;resize:vertical;padding:14px;border-radius:5px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);font-family:inherit;font-size:12px;line-height:1.6}
+
+/* ---- tabs ---- */
+.tabs{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:20}
+.tabs .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:0 12px calc(4px + env(safe-area-inset-bottom))}
+.tabs button{position:relative;padding:16px 2px 14px;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.tabs button::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:1px;background:var(--gold);transition:width .2s ease}
+.tabs button[aria-current="true"]{color:var(--ink)}
+.tabs button[aria-current="true"]::before{width:22px}
+
+/* ---- quiz ---- */
+.quiz{position:fixed;inset:0;background:var(--ground);background-image:var(--glow);background-repeat:no-repeat;z-index:40;overflow-y:auto}
+.quiz .in{max-width:520px;margin:0 auto;padding:22px 20px 44px;display:flex;flex-direction:column;gap:26px;min-height:100vh}
+.qtop{display:flex;align-items:center;gap:16px}
+.qtop .steps{flex:1;display:flex;gap:3px}
+.qtop .steps i{flex:1;height:1px;background:var(--line)}
+.qtop .steps i.on{background:var(--gold)}
+.qtop button{font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.qhead{display:flex;flex-direction:column;gap:10px}
+.qhead h3{margin:0;font-family:"Prata",Georgia,serif;font-weight:400;font-size:28px;line-height:1.14;text-wrap:balance}
+.qhead p{margin:0;font-size:12.5px;color:var(--muted);max-width:40ch}
+.opts{display:flex;flex-direction:column}
+.opt{display:flex;align-items:center;gap:15px;text-align:left;width:100%;padding:16px 2px;border:0;border-bottom:1px solid var(--line-soft);font-size:14.5px;line-height:1.3;background:none}
+.opt:first-child{border-top:1px solid var(--line-soft)}
+.opt em{display:block;font-style:normal;font-size:11.5px;color:var(--faint);margin-top:3px}
+.opt[aria-pressed="true"]{color:var(--gold)}
+.opt i.sw{width:34px;height:34px;border-radius:2px;flex:none}
+.opt .arrow{margin-left:auto;font-size:12px;color:var(--faint)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <div class="mast">
+    <div class="wordmark"><b>БЛИК</b><span>Цвет волос между визитами</span></div>
+    <div class="idchip" id="idchip"></div>
+  </div>
+  <div class="rule"></div>
+  <div class="banner" id="banner" hidden></div>
+  <main id="view" class="stack"></main>
+</div>
+
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<div class="quiz" id="quiz" hidden><div class="in" id="quizIn"></div></div>
+
+<script>
+/* ============================================================
+   НАСТРОЙКИ МАСТЕРА. Заполнить, когда будут работы и контакты.
+   works: [{src:"ссылка или data URI", cap:"6 → 9, два сеанса"}]
+   ============================================================ */
+var MASTER = { name:"", city:"Москва", telegram:"", whatsapp:"", works:[] };
+
+var LEVELS = [
+  {n:1, c:"#0E0B0A", t:"чёрный"},
+  {n:2, c:"#211712", t:"очень тёмный шатен"},
+  {n:3, c:"#33211A", t:"тёмный шатен"},
+  {n:4, c:"#4A2F22", t:"шатен"},
+  {n:5, c:"#6A452C", t:"светлый шатен"},
+  {n:6, c:"#8A5F38", t:"тёмно-русый"},
+  {n:7, c:"#A87F4E", t:"русый"},
+  {n:8, c:"#C6A26D", t:"светло-русый"},
+  {n:9, c:"#DFC394", t:"блонд"},
+  {n:10,c:"#EEDCB4", t:"светлый блонд"}
+];
+var PALETTE = {
+  cold:[{c:"#9E8C7E",n:"7.1",t:"пепельный русый"},{c:"#C8B49B",n:"8.13",t:"холодный беж"},{c:"#6E5B52",n:"5.71",t:"мокко"},{c:"#DCCFC0",n:"9.16",t:"жемчужный"},{c:"#4A3B33",n:"4.0",t:"холодный шатен"}],
+  warm:[{c:"#B5763F",n:"7.34",t:"карамель"},{c:"#8F5326",n:"6.43",t:"медный"},{c:"#D3A85C",n:"8.3",t:"золотистый"},{c:"#57392A",n:"5.35",t:"шоколад"},{c:"#E0C79A",n:"9.31",t:"тёплый беж"}],
+  neutral:[{c:"#A17E58",n:"7.0",t:"натуральный"},{c:"#CDAE84",n:"8.31",t:"бежевый"},{c:"#7C5638",n:"6.0",t:"тёмно-русый"},{c:"#DBC5A4",n:"9.13",t:"светлый беж"},{c:"#6B4830",n:"5.0",t:"светлый шатен"}]
+};
+var AVOID = {
+  cold:"Тёплое золото и медь. На холодном подтоне они уводят кожу в землистый и подчёркивают круги под глазами.",
+  warm:"Пепельный и платина. На тёплом подтоне лицо становится серым и уставшим.",
+  neutral:"Чистая платина без тонирования. Нейтральный подтон легко уходит в желтизну и выглядит неухоженно."
+};
+var TONE_NAME = {cold:"холодный", warm:"тёплый", neutral:"нейтральный"};
+var POR_NAME = {low:"низкая", mid:"средняя", high:"высокая"};
+var CUR_NAME = {none:"не окрашены", tone:"тонирование", tint:"окрашивание в тон", light:"осветление или мелирование", henna:"хна или басма"};
+var TECH = {
+  tone:{t:"Тонирование",min:4000,max:7000},
+  tint:{t:"Окрашивание в один тон",min:6000,max:9000},
+  roots:{t:"Корни и тонирование",min:9000,max:14000},
+  balayage:{t:"Шатуш или балаяж",min:13000,max:20000},
+  blond:{t:"Осветление в блонд",min:15000,max:25000}
+};
+var TYPE_NAME = {tone:"Тонирование", tint:"Окрашивание в тон", roots:"Корни и тонирование", blond:"Осветление в блонд", balayage:"Шатуш или балаяж"};
+var PLAN = {
+  tone:[{d:0,t:"Не мыть голову 48 часов",s:"Пигмент ещё садится в кутикулу"},{d:5,t:"Первое заметное вымывание",s:"Холод уходит первым"},{d:10,t:"Оттеночная маска, 5 минут",s:"Возвращает тон, не перекрашивает"},{d:18,t:"Тон стал теплее исходного",s:"Для тонирования это норма"},{d:28,t:"Пора повторить тонирование",s:"",book:true}],
+  tint:[{d:0,t:"Не мыть голову 48 часов",s:""},{d:7,t:"Первая волна вымывания",s:"Блеск падает раньше цвета"},{d:14,t:"Питательная маска, 10 минут",s:"Без масел на длину"},{d:24,t:"Цвет теряет глубину",s:"Пора подключать оттеночный уход"},{d:32,t:"Корни видны на проборе",s:""},{d:42,t:"Пора записываться",s:"",book:true}],
+  roots:[{d:0,t:"Не мыть голову 48 часов",s:""},{d:7,t:"Первая волна вымывания",s:""},{d:14,t:"Оттеночная маска, 5 минут",s:"Фиолетовая, если цвет холодный"},{d:21,t:"На длине пойдёт желтизна",s:"Фиолетовый гасит жёлтый"},{d:35,t:"Корни видны на проборе",s:""},{d:45,t:"Пора записываться",s:"",book:true}],
+  blond:[{d:0,t:"Не мыть голову 48 часов",s:"И не собирать в тугой хвост"},{d:3,t:"Только мягкая укладка",s:"Волос ещё пористый после осветления"},{d:7,t:"Первая волна вымывания",s:"Уходит холодный пигмент"},{d:14,t:"Фиолетовый шампунь, 3 минуты",s:"Не чаще раза в неделю"},{d:21,t:"Желтизна на длине",s:"Самый частый повод расстроиться"},{d:30,t:"Корни отросли на сантиметр",s:"Уже видно на проборе"},{d:45,t:"Пора записываться",s:"",book:true}],
+  balayage:[{d:0,t:"Не мыть голову 48 часов",s:""},{d:10,t:"Первое вымывание тонера",s:""},{d:21,t:"Оттеночная маска",s:"Поддерживает переход"},{d:45,t:"Обновить тонирование",s:"Растяжка ещё держится"},{d:75,t:"Отросшая зона стала заметной",s:""},{d:90,t:"Пора записываться",s:"",book:true}]
+};
+
+var KEY = "blik.v1";
+var state = null, tab = "pass";
+
+function today(){ var d=new Date(); d.setHours(0,0,0,0); return d; }
+function iso(d){ var m=d.getMonth()+1, dd=d.getDate();
+  return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd; }
+function daysAgo(n){ var d=today(); d.setDate(d.getDate()-n); return d; }
+
+function makeDemo(){
+  return {demo:true, level:6, current:"light", henna:false, porosity:"high",
+    undertone:"cold", eyes:"grey", fade:"fast",
+    colorDate:iso(daysAgo(21)), colorType:"blond",
+    goalLevel:9, goalTone:"cold", goalTech:"blond"};
+}
+function load(){
+  try{ var raw=localStorage.getItem(KEY);
+    if(raw){ var s=JSON.parse(raw); if(s&&s.level){ s.demo=false; return s; } }
+  }catch(e){}
+  return makeDemo();
+}
+function save(){ if(state.demo) return; try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+function porosity(s){
+  if(s.porosity!=="auto") return s.porosity;
+  if(s.henna||s.current==="light") return "high";
+  if(s.fade==="fast") return "high";
+  if(s.fade==="slow") return "low";
+  return "mid";
+}
+function headroom(s){ if(s.henna) return 1;
+  var p=porosity(s); return p==="low"?4:(p==="mid"?3:2); }
+function pause(s){ return porosity(s)==="high"?6:4; }
+function holds(s,diff){ var w=6;
+  if(porosity(s)==="high") w-=3; else if(porosity(s)==="mid") w-=1;
+  if(diff>3) w-=1; return Math.max(2,w); }
+function money(n){ return n.toLocaleString("ru-RU").replace(/ /g," "); }
+function plural(n,a,b,c){ var x=n%10,y=n%100;
+  if(x===1&&y!==11) return a;
+  if(x>=2&&x<=4&&(y<10||y>=20)) return b;
+  return c; }
+
+function estimate(s){
+  var diff=s.goalLevel-s.level, hr=headroom(s);
+  var sessions = diff<=0 ? 1 : Math.max(1, Math.ceil(diff/hr));
+  var tech=TECH[s.goalTech], warn=[], verdict="go", head="";
+
+  if(s.henna && diff>0){
+    verdict="stop"; sessions=Math.max(sessions,3);
+    warn.push("Хна и басма не осветляются предсказуемо: пигмент сидит в стержне волоса и реагирует на осветлитель пятнами. Честный путь это отрастить или идти в тёмный тон.");
+  } else if(sessions===1) verdict="go";
+  else if(sessions===2) verdict="care";
+  else { verdict="stop";
+    warn.push("Больше двух сеансов осветления подряд это вопрос уже не цвета, а состояния волос. Стоит обсудить промежуточный оттенок на пару уровней ниже."); }
+
+  if(verdict==="stop" && s.henna) head="На хне этот цвет не выйдет";
+  else if(sessions===1 && diff<=0 && s.current==="light") head="Один визит, но с оговоркой";
+  else if(sessions===1) head="Реально за один визит";
+  else head="Реально за "+sessions+" "+plural(sessions,"сеанс","сеанса","сеансов")+", не за один";
+
+  if(diff<=0 && s.current==="light")
+    warn.push("Тёмный тон на осветлённые волосы ложится неровно и вымывается за две недели. Нужна предпигментация, иначе цвет уйдёт в зелень.");
+  if(diff>0 && porosity(s)==="high")
+    warn.push("При высокой пористости длина возьмёт осветлитель быстрее корней. За один сеанс это даст рыжину на середине.");
+  if(s.goalTone==="cold" && s.goalLevel>=9)
+    warn.push("Холодный блонд на 9 уровне держится ровно до тех пор, пока вы поддерживаете его дома. Без фиолетового ухода он желтеет за три недели.");
+  if(s.goalTone==="warm" && s.undertone==="cold")
+    warn.push("Тёплый оттенок при холодном подтоне кожи технически выйдет, но лицо будет выглядеть уставшим. Стоит взять тон на ступень холоднее.");
+
+  return {diff:diff, sessions:sessions, verdict:verdict, head:head, warn:warn,
+    pause:pause(s), holds:holds(s,Math.abs(diff)),
+    min:tech.min*sessions, max:tech.max*sessions, tech:tech.t};
+}
+
+function shelf(s){
+  var p=porosity(s), out=[];
+  var light = s.current==="light" || s.level>=8 || s.goalLevel>=8;
+  if(light && s.undertone!=="warm")
+    out.push({n:"Фиолетовый шампунь", e:"Раз в 7 дней, держать 3 минуты. Чаще даст сиреневый налёт на пористых концах.", p:"от 890 ₽"});
+  if(light && s.undertone==="warm")
+    out.push({n:"Оттеночная маска в тёплом тоне", e:"Раз в 10 дней. Не даёт золоту уйти в соломенный.", p:"от 1 100 ₽"});
+  if(p==="high"){
+    out.push({n:"Кислотный кондиционер, pH 3.5", e:"После каждого мытья. Закрывает кутикулу и держит пигмент внутри.", p:"от 1 200 ₽"});
+    out.push({n:"Протеиновая маска раз в 10 дней", e:"Только чередуя с увлажнением, иначе волос станет ломким.", p:"от 1 500 ₽"});
+  } else {
+    out.push({n:"Увлажняющий кондиционер без силикона", e:"После каждого мытья, на длину и концы.", p:"от 800 ₽"});
+  }
+  if(s.fade==="fast")
+    out.push({n:"Фильтр на душ", e:"Московская вода жёсткая, медь и хлор дают зелёный и рыжий оттенок за месяц.", p:"от 2 400 ₽"});
+  out.push({n:"Термозащита перед феном", e:"Каждый раз. Окрашенный волос теряет цвет от температуры быстрее, чем от шампуня.", p:"от 700 ₽"});
+  return out.slice(0,4);
+}
+function avoidList(s){
+  var out=[];
+  if(s.current==="light"||s.level>=8) out.push("масла на длину до тонирования: они вытягивают пигмент быстрее, чем питают");
+  out.push("шампуни с SLS в первые две недели после окрашивания");
+  if(s.undertone==="cold") out.push("ополаскивания ромашкой и лимоном: они дают именно ту желтизну, которую вы потом гасите");
+  else out.push("солевые спреи для пляжной укладки на окрашенной длине");
+  return out;
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function levelColor(n){ return LEVELS[Math.max(1,Math.min(10,n))-1].c; }
+function levelName(n){ return LEVELS[Math.max(1,Math.min(10,n))-1].t; }
+
+function scaleHTML(cur,goal,pick){
+  var h='<div class="scale'+(pick?" pick":"")+'"'+(pick?' id="pickScale"':"")+">";
+  for(var i=0;i<LEVELS.length;i++){
+    var L=LEVELS[i], cls="lv";
+    if(L.n===cur) cls+=" on";
+    if(goal&&L.n===goal&&goal!==cur) cls+=" goal";
+    h += pick
+      ? '<button type="button" class="'+cls+'" data-lv="'+L.n+'" aria-label="Уровень '+L.n+", "+L.t+'"><i style="background:'+L.c+'"></i><span>'+L.n+"</span></button>"
+      : '<div class="'+cls+'"><i style="background:'+L.c+'"></i><span>'+L.n+"</span></div>";
+  }
+  return h+"</div>";
+}
+function scaleBlock(cur,goal,pick){
+  return '<div class="scalewrap">'+scaleHTML(cur,goal,pick)+
+    '<div class="scalefoot"><span>Чёрный</span><span>Шкала уровней</span><span>Блонд</span></div></div>';
+}
+
+/* ---------------- экраны ---------------- */
+function viewPassport(){
+  var s=state, hr=headroom(s);
+  var pal=PALETTE[s.undertone].map(function(x){
+    return '<div class="p"><i style="background:'+x.c+'"></i><span><b>'+x.n+"</b>"+esc(x.t)+"</span></div>"; }).join("");
+
+  return ''+
+  '<div class="vhead"><span class="lab">Паспорт волос</span>'+
+    "<h2>Уровень "+s.level+", "+esc(levelName(s.level))+"</h2>"+
+    "<p>Всё, что нужно знать про ваш цвет, на одной карточке. Покажите её любому мастеру.</p></div>"+
+  '<div class="block">'+
+    '<div class="hero"><div class="swatch" style="background:'+levelColor(s.level)+'"></div>'+
+      '<div class="meta"><span class="u">Осветление за сеанс</span>'+
+        '<span class="n">+'+hr+"</span>"+
+        '<span class="t">'+(hr===1?"уровень":"уровня")+" при "+POR_NAME[porosity(s)]+" пористости</span></div></div>"+
+    scaleBlock(s.level,0,false)+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Диагностика</span><span class="s">7 ответов</span></div>'+
+    '<div class="kv">'+
+      '<div class="row"><span class="k">Подтон кожи</span><span class="v">'+TONE_NAME[s.undertone]+"</span></div>"+
+      '<div class="row"><span class="k">Пористость</span><span class="v">'+POR_NAME[porosity(s)]+"</span></div>"+
+      '<div class="row"><span class="k">Сейчас на волосах</span><span class="v">'+CUR_NAME[s.current]+"</span></div>"+
+      '<div class="row"><span class="k">Хна за последний год</span><span class="v">'+(s.henna?"да":"нет")+"</span></div>"+
+    "</div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Ваши оттенки</span><span class="s">'+TONE_NAME[s.undertone]+" подтон</span></div>"+
+    '<div class="pal">'+pal+"</div>"+
+    '<div class="note">'+esc(AVOID[s.undertone])+"</div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Круг нейтрализации</span><span class="s">Основа ухода</span></div>'+
+    wheelSVG()+
+    '<div class="note ok">Цвет напротив гасит цвет напротив. Жёлтый гасится фиолетовым, оранжевый синим, красный зелёным. Это всё, что нужно знать, чтобы выбрать уход осознанно.</div>'+
+  "</div>"+
+  '<button class="btn ghost" data-act="quiz">Пройти тест заново</button>';
+}
+
+function wheelSVG(){
+  return '<svg viewBox="0 0 220 196" width="100%" style="max-width:240px;margin:4px auto 0;display:block" role="img" aria-label="Круг нейтрализации: жёлтый напротив фиолетового, оранжевый напротив синего, красный напротив зелёного">'+
+    '<circle cx="110" cy="98" r="70" fill="none" stroke="var(--line)" stroke-width="1"></circle>'+
+    '<g stroke="var(--line-soft)" stroke-width="1">'+
+      '<line x1="110" y1="28" x2="110" y2="168"></line>'+
+      '<line x1="49" y1="63" x2="171" y2="133"></line>'+
+      '<line x1="49" y1="133" x2="171" y2="63"></line></g>'+
+    '<circle cx="110" cy="28" r="11" fill="#D9C24A"></circle>'+
+    '<circle cx="110" cy="168" r="11" fill="#8A5FC0"></circle>'+
+    '<circle cx="171" cy="63" r="11" fill="#D98A3F"></circle>'+
+    '<circle cx="49" cy="133" r="11" fill="#4A73C0"></circle>'+
+    '<circle cx="171" cy="133" r="11" fill="#C05252"></circle>'+
+    '<circle cx="49" cy="63" r="11" fill="#4FA36B"></circle>'+
+    '<text x="110" y="103" text-anchor="middle" fill="var(--ink)" font-family="Prata, Georgia, serif" font-size="14">напротив</text>'+
+  "</svg>";
+}
+
+function viewGoal(){
+  var s=state, r=estimate(s);
+  var warnHTML=r.warn.map(function(w){
+    return '<div class="note'+(r.verdict==="stop"?" stop":"")+'">'+esc(w)+"</div>"; }).join("");
+  var techOpts=Object.keys(TECH).map(function(k){
+    return '<option value="'+k+'"'+(s.goalTech===k?" selected":"")+">"+TECH[k].t+"</option>"; }).join("");
+
+  return ''+
+  '<div class="vhead"><span class="lab">Проверка референса</span>'+
+    "<h2>"+s.level+" → "+s.goalLevel+"</h2>"+
+    "<p>Сколько сеансов, сколько денег и что будет с волосами. До записи, а не после.</p></div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Какой уровень хотите</span><span class="s">'+esc(levelName(s.goalLevel))+"</span></div>"+
+    scaleBlock(s.level,s.goalLevel,true)+
+    '<div class="field"><span class="lab">Характер оттенка</span><div class="seg" data-seg="goalTone">'+
+      '<button type="button" data-v="cold" aria-pressed="'+(s.goalTone==="cold")+'">Холодный</button>'+
+      '<button type="button" data-v="neutral" aria-pressed="'+(s.goalTone==="neutral")+'">Натуральный</button>'+
+      '<button type="button" data-v="warm" aria-pressed="'+(s.goalTone==="warm")+'">Тёплый</button></div></div>'+
+    '<div class="field"><span class="lab">Техника</span><select id="techSel">'+techOpts+"</select></div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="verdict '+r.verdict+'"><span class="vs">Вердикт</span><span class="vv">'+esc(r.head)+"</span></div>"+
+    '<div class="kv">'+
+      '<div class="row"><span class="k">Сеансов</span><span class="v gold">'+r.sessions+"</span></div>"+
+      (r.sessions>1?'<div class="row"><span class="k">Пауза между ними</span><span class="v">'+r.pause+" недель</span></div>":"")+
+      '<div class="row"><span class="k">Бюджет по Москве</span><span class="v">'+money(r.min)+" до "+money(r.max)+" ₽</span></div>"+
+      '<div class="row"><span class="k">Держится до тонирования</span><span class="v">'+r.holds+" недель</span></div>"+
+    "</div>"+
+    warnHTML+
+    '<div class="note">Вилка по рынку Москвы на длину до лопаток. У конкретного мастера цена может отличаться.</div>'+
+  "</div>"+
+  '<button class="btn" data-act="tab-master">Обсудить с мастером</button>';
+}
+
+function viewCycle(){
+  var s=state;
+  var start=new Date(s.colorDate+"T00:00:00");
+  var day=Math.floor((today()-start)/86400000);
+  var k=porosity(s)==="high"?0.8:(porosity(s)==="low"?1.15:1);
+  var plan=PLAN[s.colorType].map(function(e){ return {d:Math.round(e.d*k),t:e.t,s:e.s,book:e.book}; });
+  var last=plan[plan.length-1].d;
+  var next=plan.filter(function(e){ return e.d>=day; })[0]||plan[plan.length-1];
+
+  var rows=plan.map(function(e){
+    var cls="t";
+    if(e.d<day-1) cls+=" past";
+    if(e===next) cls+=" now";
+    if(e.book) cls+=" book";
+    return '<div class="'+cls+'"><span class="d">'+e.d+'</span><span class="c"><b>'+esc(e.t)+"</b>"+
+      (e.s?"<em>"+esc(e.s)+"</em>":"")+"</span></div>";
+  }).join("");
+
+  var pct=Math.max(0,Math.min(100,Math.round(day/last*100)));
+  var left=Math.max(0,last-day);
+  var typeOpts=Object.keys(PLAN).map(function(kk){
+    return '<option value="'+kk+'"'+(s.colorType===kk?" selected":"")+">"+TYPE_NAME[kk]+"</option>"; }).join("");
+
+  return ''+
+  '<div class="vhead"><span class="lab">Цикл цвета</span>'+
+    "<h2>Цвет портится по расписанию</h2>"+
+    "<p>Здесь видно, что произойдёт с вашим цветом и на какой именно день.</p></div>"+
+  '<div class="block">'+
+    '<div class="daybig"><span class="n">'+(day<0?0:day)+'</span><span class="c">'+
+      "<b>"+(day<0?"до окрашивания":"день цикла")+"</b>"+
+      "<span>"+(left>0?"до записи "+left+" "+plural(left,"день","дня","дней"):"цвет отработал своё")+"</span></span></div>"+
+    '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Окрашивание</span><span class="s">'+esc(TYPE_NAME[s.colorType])+"</span></div>"+
+    '<div class="field"><span class="lab">Дата</span><input type="date" id="cdate" value="'+s.colorDate+'" max="'+iso(today())+'"></div>'+
+    '<div class="field"><span class="lab">Что делали</span><select id="ctype">'+typeOpts+"</select></div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Что будет дальше</span><span class="s">дни</span></div>'+
+    '<div class="tl">'+rows+"</div>"+
+  "</div>"+
+  (left<=10
+    ? '<button class="btn" data-act="tab-master">Записаться на обновление цвета</button>'
+    : '<div class="note">Кнопка записи появится на '+(last-10)+" день, когда цвет действительно этого попросит. До тех пор смысла нет.</div>");
+}
+
+function viewShelf(){
+  var s=state;
+  var items=shelf(s).map(function(x){
+    return '<div class="item"><span class="n">'+esc(x.n)+"<em>"+esc(x.e)+'</em></span><span class="p">'+esc(x.p)+"</span></div>"; }).join("");
+  var avoid=avoidList(s).map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("");
+  var head=[(s.current==="light"?"осветлённые":CUR_NAME[s.current]), POR_NAME[porosity(s)]+" пористость", TONE_NAME[s.undertone]+" тон"].join(", ");
+
+  return ''+
+  '<div class="vhead"><span class="lab">Полка ухода</span>'+
+    "<h2>Четыре позиции вместо пятнадцати</h2>"+
+    "<p>Подобрано под ваш случай: "+esc(head)+".</p></div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Что нужно</span><span class="s">минимум</span></div>'+
+    '<div class="shelf">'+items+"</div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Чего не делать</span><span class="s">частые ошибки</span></div>'+
+    '<ul class="avoid">'+avoid+"</ul>"+
+  "</div>"+
+  '<div class="note">Цены это ориентир по нижней границе рабочего качества. Более дорогая банка не всегда работает лучше, но более дешёвая почти всегда работает хуже.</div>';
+}
+
+function summaryText(){
+  var s=state, r=estimate(s);
+  return ["Моя карточка из БЛИКа","",
+    "Уровень тона: "+s.level+" ("+levelName(s.level)+")",
+    "Подтон кожи: "+TONE_NAME[s.undertone],
+    "Пористость: "+POR_NAME[porosity(s)],
+    "Сейчас на волосах: "+CUR_NAME[s.current],
+    "Хна за последний год: "+(s.henna?"да":"нет"),
+    "Последнее окрашивание: "+s.colorDate,"",
+    "Хочу: уровень "+s.goalLevel+", "+TONE_NAME[s.goalTone]+" тон, "+TECH[s.goalTech].t.toLowerCase(),
+    "Расчёт приложения: "+r.sessions+" "+plural(r.sessions,"сеанс","сеанса","сеансов")+", "+money(r.min)+" до "+money(r.max)+" ₽","",
+    "Вопросы к мастеру:",
+    "1. Какой оксид будете использовать на моей пористости",
+    "2. Сколько продержится тон до первого обновления",
+    "3. Что купить домой, чтобы цвет дожил до следующего визита"].join("\n");
+}
+
+function viewMaster(){
+  var works;
+  if(MASTER.works && MASTER.works.length){
+    works=MASTER.works.slice(0,6).map(function(w){
+      return '<div class="work"><img src="'+esc(w.src)+'" alt="'+esc(w.cap||"Работа мастера")+'" loading="lazy">'+
+        (w.cap?'<span class="cap">'+esc(w.cap)+"</span>":"")+"</div>"; }).join("");
+  } else {
+    works=[1,2,3,4].map(function(i){
+      return '<div class="slot"><b>'+i+"</b><span>Работа<br>до и после</span></div>"; }).join("");
+  }
+  var links="";
+  if(MASTER.telegram) links+='<a class="btn" href="https://t.me/'+esc(MASTER.telegram)+'" target="_blank" rel="noopener">Написать в Телеграм</a>';
+  if(MASTER.whatsapp) links+='<a class="btn ghost" href="https://wa.me/'+esc(MASTER.whatsapp)+"?text="+encodeURIComponent(summaryText())+'" target="_blank" rel="noopener">Написать в WhatsApp</a>';
+  if(!links) links='<div class="note">Контакты мастера пока не заполнены. Скопируйте карточку и отправьте её в директ.</div>';
+
+  return ''+
+  '<div class="vhead"><span class="lab">Мастер</span>'+
+    "<h2>"+(MASTER.name?esc(MASTER.name):"Колорист, "+esc(MASTER.city))+"</h2>"+
+    "<p>Сложный цвет и исправление домашних окрашиваний.</p></div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Работы</span><span class="s">до и после</span></div>'+
+    '<div class="works">'+works+"</div>"+
+  "</div>"+
+  '<div class="panel">'+
+    '<div class="phead"><span class="t">Карточка для мастера</span><span class="s">скопировать</span></div>'+
+    '<textarea class="summary" id="summary" readonly>'+esc(summaryText())+"</textarea>"+
+    '<button class="btn ghost" data-act="copy">Скопировать карточку</button>'+
+  "</div>"+
+  '<div class="btnrow">'+links+"</div>"+
+  '<div class="note">Эта карточка работает у любого колориста, не только у меня. Если пойдёте к другому мастеру, всё равно возьмите её с собой.</div>';
+}
+
+/* ---------------- квиз ---------------- */
+var QUESTIONS=[
+  {k:"level", q:"Какой у вас натуральный уровень тона", hint:"Смотрите на корни при дневном свете, а не на окрашенную длину",
+   opts:LEVELS.map(function(L){ return {v:L.n, t:L.n+". "+L.t, sw:L.c}; })},
+  {k:"current", q:"Что сейчас на волосах", hint:"Считаем последние двенадцать месяцев",
+   opts:[{v:"none",t:"Не окрашены"},{v:"tone",t:"Тонирование",e:"Смывается за месяц, не осветляет"},
+     {v:"tint",t:"Окрашивание в тон",e:"Стойкая краска, корни отрастают"},
+     {v:"light",t:"Осветление или мелирование",e:"Блонд, шатуш, балаяж"},{v:"henna",t:"Хна или басма"}]},
+  {k:"henna", q:"Была ли хна или басма за последний год", hint:"Единственный вопрос, где ошибка стоит дороже всего",
+   opts:[{v:false,t:"Нет"},{v:true,t:"Да"},{v:true,t:"Не уверена",e:"Считаем как да, так безопаснее"}]},
+  {k:"porosity", q:"Опустите волос в стакан воды", hint:"Возьмите волос с расчёски и подождите тридцать секунд",
+   opts:[{v:"high",t:"Утонул быстро",e:"Высокая пористость, волос впитывает всё подряд"},
+     {v:"mid",t:"Опускается медленно",e:"Средняя пористость, обычное состояние"},
+     {v:"low",t:"Остался на поверхности",e:"Низкая пористость, кутикула плотная"},
+     {v:"auto",t:"Не проверяла",e:"Посчитаем по остальным ответам"}]},
+  {k:"undertone", q:"Посмотрите на вены на запястье", hint:"При дневном свете, не под лампой",
+   opts:[{v:"cold",t:"Синие или фиолетовые",e:"Холодный подтон"},{v:"warm",t:"Зеленоватые",e:"Тёплый подтон"},
+     {v:"neutral",t:"И те и другие",e:"Нейтральный подтон"}]},
+  {k:"eyes", q:"Какого цвета глаза", hint:"Нужно для акцентных оттенков в палитре",
+   opts:[{v:"brown",t:"Карие"},{v:"green",t:"Зелёные"},{v:"grey",t:"Серые"},{v:"blue",t:"Голубые"},{v:"hazel",t:"Ореховые"}]},
+  {k:"fade", q:"Как быстро вымывается цвет", hint:"Если красились хотя бы раз",
+   opts:[{v:"fast",t:"За две недели"},{v:"normal",t:"Примерно за месяц"},{v:"slow",t:"Держится долго"},{v:"normal",t:"Не крашусь"}]}
+];
+var qStep=0, qDraft=null, qSel={};
+
+function openQuiz(){
+  qStep=0; qSel={};
+  qDraft={level:6,current:"none",henna:false,porosity:"auto",undertone:"neutral",eyes:"brown",fade:"normal",
+    colorDate:iso(today()),colorType:"tint",goalLevel:8,goalTone:"cold",goalTech:"tint"};
+  document.getElementById("quiz").hidden=false;
+  document.body.style.overflow="hidden";
+  renderQuiz();
+}
+function closeQuiz(){ document.getElementById("quiz").hidden=true; document.body.style.overflow=""; }
+function renderQuiz(){
+  var Q=QUESTIONS[qStep];
+  var steps=QUESTIONS.map(function(_,i){ return '<i class="'+(i<=qStep?"on":"")+'"></i>'; }).join("");
+  var opts=Q.opts.map(function(o,i){
+    return '<button type="button" class="opt" data-i="'+i+'" aria-pressed="'+(qSel[qStep]===i)+'">'+
+      (o.sw?'<i class="sw" style="background:'+o.sw+'"></i>':"")+
+      "<span>"+esc(o.t)+(o.e?"<em>"+esc(o.e)+"</em>":"")+'</span><span class="arrow">→</span></button>'; }).join("");
+  document.getElementById("quizIn").innerHTML=
+    '<div class="qtop"><div class="steps">'+steps+"</div>"+
+      '<button type="button" data-q="close">Закрыть</button></div>'+
+    '<div class="qhead"><span class="lab">Шаг '+(qStep+1)+" из "+QUESTIONS.length+"</span>"+
+      "<h3>"+esc(Q.q)+"</h3><p>"+esc(Q.hint)+"</p></div>"+
+    '<div class="opts">'+opts+"</div>"+
+    '<div class="btnrow" style="margin-top:auto">'+
+      (qStep>0?'<button type="button" class="btn ghost" data-q="back">Назад</button>':"")+"</div>";
+}
+function answer(i){
+  var Q=QUESTIONS[qStep];
+  qDraft[Q.k]=Q.opts[i].v; qSel[qStep]=i;
+  if(Q.k==="current"){
+    if(qDraft.current==="henna") qDraft.henna=true;
+    qDraft.colorType = qDraft.current==="light" ? "blond" : (qDraft.current==="tone" ? "tone" : "tint");
+  }
+  if(qStep<QUESTIONS.length-1){ qStep++; renderQuiz(); }
+  else{
+    qDraft.demo=false;
+    qDraft.goalLevel=Math.min(10,qDraft.level+2);
+    qDraft.goalTone=qDraft.undertone==="warm"?"warm":"cold";
+    qDraft.goalTech=qDraft.goalLevel-qDraft.level>=2?"blond":"tint";
+    state=qDraft; save(); closeQuiz(); tab="pass"; render();
+  }
+}
+
+/* ---------------- каркас ---------------- */
+var TABS=[{k:"pass",t:"Паспорт"},{k:"goal",t:"Цель"},{k:"cycle",t:"Цикл"},{k:"care",t:"Уход"},{k:"master",t:"Мастер"}];
+
+function render(){
+  document.getElementById("idchip").innerHTML=
+    '<i style="background:'+levelColor(state.level)+'"></i><span>'+state.level+" · "+TONE_NAME[state.undertone]+"</span>";
+
+  var b=document.getElementById("banner");
+  if(state.demo){
+    b.hidden=false;
+    b.innerHTML='<b>Пример</b><span>уровень 6, холодный подтон, осветление три недели назад</span>'+
+      '<button type="button" data-act="quiz">Пройти свой тест</button>';
+  } else b.hidden=true;
+
+  document.getElementById("tabs").innerHTML=TABS.map(function(T){
+    return '<button type="button" data-tab="'+T.k+'" aria-current="'+(tab===T.k)+'">'+T.t+"</button>"; }).join("");
+
+  var v=document.getElementById("view");
+  if(tab==="pass") v.innerHTML=viewPassport();
+  else if(tab==="goal") v.innerHTML=viewGoal();
+  else if(tab==="cycle") v.innerHTML=viewCycle();
+  else if(tab==="care") v.innerHTML=viewShelf();
+  else v.innerHTML=viewMaster();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener("click",function(e){
+  var t;
+  if((t=e.target.closest("[data-tab]"))){ tab=t.dataset.tab; render(); return; }
+  if((t=e.target.closest("[data-q]"))){
+    if(t.dataset.q==="close") closeQuiz();
+    if(t.dataset.q==="back"){ qStep=Math.max(0,qStep-1); renderQuiz(); }
+    return;
+  }
+  if((t=e.target.closest(".opt"))){ answer(+t.dataset.i); return; }
+  if((t=e.target.closest("[data-act]"))){
+    var a=t.dataset.act;
+    if(a==="quiz"){ openQuiz(); return; }
+    if(a==="tab-master"){ tab="master"; render(); return; }
+    if(a==="copy"){
+      var ta=document.getElementById("summary");
+      ta.removeAttribute("readonly"); ta.select(); ta.setSelectionRange(0,99999);
+      var done=false;
+      try{ done=document.execCommand("copy"); }catch(err){}
+      ta.setAttribute("readonly","readonly");
+      if(navigator.clipboard && !done){
+        navigator.clipboard.writeText(summaryText()).then(
+          function(){ flash(t,"Скопировано"); },
+          function(){ flash(t,"Выделено, нажмите копировать"); });
+      } else flash(t, done?"Скопировано":"Выделено, нажмите копировать");
+      return;
+    }
+  }
+  if((t=e.target.closest("#pickScale [data-lv]"))){ state.goalLevel=+t.dataset.lv; save(); render(); return; }
+  if((t=e.target.closest("[data-seg] button"))){ state[t.parentNode.dataset.seg]=t.dataset.v; save(); render(); return; }
+});
+
+document.addEventListener("change",function(e){
+  if(e.target.id==="techSel"){ state.goalTech=e.target.value; save(); render(); }
+  if(e.target.id==="cdate" && e.target.value){ state.colorDate=e.target.value; save(); render(); }
+  if(e.target.id==="ctype"){ state.colorType=e.target.value; save(); render(); }
+});
+
+function flash(btn,msg){ var old=btn.textContent; btn.textContent=msg;
+  setTimeout(function(){ btn.textContent=old; },1800); }
+
+state=load();
+render();
+</script>
